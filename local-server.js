@@ -5,8 +5,8 @@ const { Innertube, UniversalCache } = require('youtubei.js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files from the current directory
-app.use(express.static(path.join(__dirname)));
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Parse duration text formatted as "MM:SS" or "H:MM:SS" into total seconds
 function parseDurationText(text) {
@@ -105,7 +105,7 @@ app.get('/api/playlist', async (req, res) => {
 
 // Fallback to index.html for single page routing
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 app.listen(PORT, () => {
