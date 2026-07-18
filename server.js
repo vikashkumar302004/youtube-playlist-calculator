@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const { Innertube } = require('youtubei.js');
+const { Innertube, UniversalCache } = require('youtubei.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,7 +32,10 @@ app.get('/api/playlist', async (req, res) => {
 
     try {
         console.log(`[Proxy] Initializing Innertube client...`);
-        const yt = await Innertube.create();
+        const yt = await Innertube.create({
+            cache: new UniversalCache(false),
+            enable_session_cache: false
+        });
         
         // Extract Playlist ID from URL if necessary
         let playlistId = playlistUrl.trim();
