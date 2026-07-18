@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Playlist Length Calculator - Calculate Playlist Duration</title>
+    <meta name="description" content="Calculate the total duration, average length, and watch time of any YouTube playlist at different playback speeds (1.25x, 1.5x, 2x). Free, fast, and no API key required.">
+    <meta name="keywords" content="youtube playlist calculator, youtube playlist length, playlist length calculator, youtube duration calculator, calculate playlist watch time">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="YT Length Calculator">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yt-playlist-calculator.com/">
+    <meta property="og:title" content="YouTube Playlist Length Calculator - Free & Easy">
+    <meta property="og:description" content="Easily calculate the total length and watch time of any YouTube playlist. See how much time you save at 1.25x, 1.5x, 2.0x speeds. No API key needed!">
+    <meta property="og:image" content="https://yt-playlist-calculator.com/assets/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://yt-playlist-calculator.com/">
+    <meta property="twitter:title" content="YouTube Playlist Length Calculator - Free & Easy">
+    <meta property="twitter:description" content="Easily calculate the total length and watch time of any YouTube playlist. See how much time you save at 1.25x, 1.5x, 2.0x speeds. No API key needed!">
+    <meta property="twitter:image" content="https://yt-playlist-calculator.com/assets/og-image.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://yt-playlist-calculator.com/">
+
+    <!-- JSON-LD Structured Data Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "YouTube Playlist Length Calculator",
+      "url": "https://yt-playlist-calculator.com/",
+      "description": "A free online tool to calculate the total duration and length of any YouTube playlist, showing playback speed calculations (1.25x, 1.5x, 1.75x, 2.0x) and detailed video statistics.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Configuration Panel -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-brands fa-youtube"></i>
+                </div>
+                <div>
+                    <h1>PlayTime</h1>
+                    <p>Playlist Calculator</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h2><i class="fa-solid fa-link"></i> Input Playlist</h2>
+                <div class="input-group">
+                    <label for="playlist-url">Playlist URL or ID</label>
+                    <input type="text" id="playlist-url" placeholder="https://www.youtube.com/playlist?list=...">
+                </div>
+                <button id="btn-fetch" class="btn btn-primary btn-block">
+                    <i class="fa-solid fa-calculator"></i> Calculate Length
+                </button>
+                <button id="btn-demo" class="btn btn-secondary btn-block">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Try Demo Mode
+                </button>
+            </div>
+
+            <!-- Quick Instructions -->
+            <div class="instruction-card">
+                <h3><i class="fa-solid fa-circle-info"></i> How to use?</h3>
+                <ol>
+                    <li>Paste any public YouTube playlist link or ID in the input box above.</li>
+                    <li>Click <strong>Calculate Length</strong> to analyze the video list and totals.</li>
+                    <li>Toggle individual videos using checkboxes to custom calculate duration.</li>
+                </ol>
+            </div>
+            
+            <footer class="sidebar-footer">
+                <p>Designed with <i class="fa-solid fa-heart text-danger"></i> for productivity</p>
+            </footer>
+        </aside>
+
+        <!-- Main Dashboard Content -->
+        <main class="dashboard">
+            <!-- Header Section -->
+            <header class="dashboard-header">
+                <div class="playlist-info-card hidden" id="playlist-info">
+                    <img id="playlist-thumb" src="" alt="Playlist Thumbnail" class="playlist-thumbnail">
+                    <div class="playlist-meta">
+                        <span class="badge">Active Playlist</span>
+                        <h2 id="playlist-title">Playlist Title</h2>
+                        <p id="playlist-channel"><i class="fa-solid fa-user"></i> Channel Name</p>
+                    </div>
+                </div>
+                <div class="welcome-card" id="welcome-message">
+                    <h2>Welcome to PlayTime Playlist Calculator!</h2>
+                    <p>Paste a YouTube playlist link on the left sidebar to calculate its duration, track watch progress, and sort videos, or click <strong>"Try Demo Mode"</strong> to see it in action instantly.</p>
+                </div>
+            </header>
+
+            <!-- Stats Grid -->
+            <section class="stats-section">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-chart-simple"></i> Playlist Summary</h2>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card duration">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div class="stat-data">
+                            <h3>Total Length</h3>
+                            <div class="stat-value" id="stat-total-duration">0h 0m 0s</div>
+                            <p class="stat-desc" id="stat-total-count">0 Videos</p>
+                        </div>
+                    </div>
+                    <div class="stat-card selection">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="stat-data">
+                            <h3>Selected Length</h3>
+                            <div class="stat-value text-accent" id="stat-selected-duration">0h 0m 0s</div>
+                            <p class="stat-desc" id="stat-selected-count">0 of 0 Selected</p>
+                        </div>
+                    </div>
+                    <div class="stat-card average">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-data">
+                            <h3>Average Length</h3>
+                            <div class="stat-value" id="stat-avg-duration">0m 0s</div>
+                            <p class="stat-desc" id="stat-range">Shortest: - | Longest: -</p>
+                        </div>
+                    </div>
+                    <div class="stat-card progress-card">
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-data">
+                            <h3>Watch Progress</h3>
+                            <div class="stat-value" id="stat-progress-val">0%</div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" id="stat-progress-bar" style="width: 0%;"></div>
+                            </div>
+                            <p class="stat-desc" id="stat-progress-desc">0 of 0 videos completed</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Speed Multipliers -->
+            <section class="speeds-section">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-gauge-high"></i> Duration at Playback Speeds</h2>
+                </div>
+                <div class="speeds-grid">
+                    <div class="speed-card">
+                        <span class="speed-badge">1.25x</span>
+                        <div class="speed-value" id="speed-125">00:00:00</div>
+                        <div class="speed-saved"><i class="fa-solid fa-bolt"></i> Saves <span id="save-125">0m</span></div>
+                    </div>
+                    <div class="speed-card">
+                        <span class="speed-badge">1.50x</span>
+                        <div class="speed-value" id="speed-150">00:00:00</div>
+                        <div class="speed-saved"><i class="fa-solid fa-bolt"></i> Saves <span id="save-150">0m</span></div>
+                    </div>
+                    <div class="speed-card">
+                        <span class="speed-badge">1.75x</span>
+                        <div class="speed-value" id="speed-175">00:00:00</div>
+                        <div class="speed-saved"><i class="fa-solid fa-bolt"></i> Saves <span id="save-175">0m</span></div>
+                    </div>
+                    <div class="speed-card">
+                        <span class="speed-badge">2.00x</span>
+                        <div class="speed-value" id="speed-200">00:00:00</div>
+                        <div class="speed-saved"><i class="fa-solid fa-bolt"></i> Saves <span id="save-200">0m</span></div>
+                    </div>
+                    <div class="speed-card custom-speed">
+                        <span class="speed-badge">Custom Speed</span>
+                        <div class="custom-speed-controls">
+                            <span class="custom-speed-val" id="custom-speed-label">1.25x</span>
+                            <input type="range" id="custom-speed-slider" min="0.25" max="3.0" step="0.05" value="1.25" class="speed-slider">
+                        </div>
+                        <div class="speed-value" id="custom-speed-time">00:00:00</div>
+                        <div class="speed-saved"><i class="fa-solid fa-bolt"></i> Saves <span id="custom-speed-save">0m</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Videos List Section -->
+            <section class="list-section">
+                <div class="list-header">
+                    <div class="list-header-left">
+                        <h2><i class="fa-solid fa-list-ol"></i> Videos in Playlist</h2>
+                        <div class="list-controls">
+                            <button id="btn-select-all" class="btn-text"><i class="fa-solid fa-check-double"></i> Select All</button>
+                            <button id="btn-deselect-all" class="btn-text"><i class="fa-solid fa-square"></i> Deselect All</button>
+                            <div class="sort-wrapper">
+                                <i class="fa-solid fa-sort"></i>
+                                <select id="video-sort" class="sort-select">
+                                    <option value="original">Default Order</option>
+                                    <option value="shortest">Shortest First</option>
+                                    <option value="longest">Longest First</option>
+                                    <option value="title">Alphabetical</option>
+                                </select>
+                            </div>
+                            <div class="export-controls">
+                                <button id="btn-export-csv" class="btn-text" title="Export as CSV"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                                <button id="btn-export-json" class="btn-text" title="Export as JSON"><i class="fa-solid fa-file-code"></i> Export JSON</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="video-search" placeholder="Search videos...">
+                    </div>
+                </div>
+
+                <!-- Video List Container -->
+                <div class="video-list-container">
+                    <div class="empty-list" id="empty-list-view">
+                        <i class="fa-solid fa-play"></i>
+                        <p>No playlist loaded yet. Enter a link or try demo mode.</p>
+                    </div>
+                    <div class="video-list hidden" id="video-list">
+                        <!-- Dynamic content loaded from app.js -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEO FAQ / Guide Section -->
+            <section class="seo-faq-section">
+                <div class="section-title">
+                    <h2><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions & Guide</h2>
+                </div>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h3>What is a YouTube Playlist Length Calculator?</h3>
+                        <p>A YouTube Playlist Length Calculator is an online tool that helps you calculate the total running time or duration of any public YouTube playlist. It analyzes each video, adds up their lengths, and displays the total watch time in a user-friendly format (days, hours, minutes, and seconds).</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>How do I calculate the total duration of a YouTube playlist?</h3>
+                        <p>Simply copy the link of the YouTube playlist from your browser or app, paste it into our input box in the sidebar, and click <strong>Calculate Length</strong>. The application will instantly load the videos, display their details, and show the total duration and average length.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Can I calculate playlist length at 1.25x, 1.5x, or 2x speed?</h3>
+                        <p>Yes, absolutely! Our tool features a dedicated <strong>Playback Speeds panel</strong> that automatically computes the total duration if you watch the playlist at faster speeds (1.25x, 1.5x, 1.75x, and 2.0x). It also displays exactly how much watch time you will save.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Do I need a Google YouTube API key to use this calculator?</h3>
+                        <p>No. While other online playlist calculators force you to set up Google Cloud Developer accounts and create an API Key, our tool runs a secure Node.js proxy server. This server retrieves the playlist details directly and securely on your behalf, so you can calculate lengths with zero setup.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Can I exclude specific videos from the calculation?</h3>
+                        <p>Yes! Our tool provides a fully interactive checkbox next to each video in the list. You can uncheck any video to exclude it, and the Total Duration, Selected Duration, average length, and speed calculations will update in real-time.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>How does sorting help in calculating playlist duration?</h3>
+                        <p>We provide advanced sorting options (Default Order, Shortest First, Longest First, and Alphabetical). If you want to skip the longest videos to save time, you can sort by **Longest First**, deselect them, and see the updated duration instantly.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">
+        <i class="fa-solid fa-circle-exclamation toast-icon"></i>
+        <span id="toast-message">Notification message</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

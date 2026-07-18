@@ -1,0 +1,23 @@
+{
+  "name": "playtime-playlist-calculator",
+  "version": "1.0.0",
+  "description": "YouTube Playlist Length Calculator without API Key",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "youtube",
+    "playlist",
+    "duration",
+    "calculator"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "youtube-sr": "^4.3.11",
+    "youtubei.js": "^17.2.0"
+  }
+}
