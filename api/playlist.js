@@ -1,5 +1,3 @@
-const { Innertube, UniversalCache } = require('youtubei.js');
-
 module.exports = async (req, res) => {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,6 +14,7 @@ module.exports = async (req, res) => {
     }
 
     try {
+        const { Innertube, UniversalCache } = await import('youtubei.js');
         console.log(`[Vercel Serverless] Initializing Innertube client...`);
         const yt = await Innertube.create({
             cache: new UniversalCache(false),

@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const { Innertube, UniversalCache } = require('youtubei.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,6 +30,7 @@ app.get('/api/playlist', async (req, res) => {
     }
 
     try {
+        const { Innertube, UniversalCache } = await import('youtubei.js');
         console.log(`[Proxy] Initializing Innertube client...`);
         const yt = await Innertube.create({
             cache: new UniversalCache(false),
